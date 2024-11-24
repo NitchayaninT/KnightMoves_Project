@@ -16,12 +16,25 @@ public class Knight {
             new int[]{2, 1}, new int[]{2, -1}, new int[]{-2, 1}, new int[]{-2, -1},
             new int[]{1, 2}, new int[]{-1, 2}, new int[]{1, -2}, new int[]{-1, -2}
     ));
-    private ArrayList<int[]> currentKnightMoves;
+    //private ArrayList<int[]> currentKnightMoves; //currently not sure if this is important, because we
+    //will use the graph to update edges and vertices
     int[] knightPosition = new int[2]; //store current position
     int boardSize;
+    SimpleGraph<Integer, DefaultEdge> boardGraph;
+
+    //get knight's graph. this is for the Board class to calculate BFS
+    public SimpleGraph<Integer,DefaultEdge> getKnightGraph()
+    {
+        return boardGraph;
+    }
+    //get default knight moves
+    public ArrayList<int[]> getDefaultKnightMoves()
+    {
+        return defaultKnightMoves;
+    }
 
     public Knight() {
-        currentKnightMoves = new ArrayList<>();
+        boardGraph = new SimpleGraph<>(DefaultEdge.class);
         boardSize= 0;
     }
 
@@ -48,11 +61,11 @@ public class Knight {
         }
         System.out.println("knight position : "+Arrays.toString(knightPosition));
     }
-    public void initialKnightMoves()
+    public void initialKnightMoves(int knightID,int boardSize)
     {
-        Board B = new Board(boardSize);
-        SimpleGraph<Integer, DefaultEdge> boardGraph = new SimpleGraph<>(DefaultEdge.class);
-        //insert all vertices
+        setKnightPosition(knightID,boardSize);
+        boardGraph = new SimpleGraph<>(DefaultEdge.class);
+        //insert vertices. (from 0 to N*N)
         int count = 0;
         for(int i=0;i<boardSize;i++)
         {
@@ -75,17 +88,19 @@ public class Knight {
             }
             //add possible edges that a knight can move.
             //if either x-axis or y-axis is negative, that means its out of the board
+            //its the edges are also inserted in boardGraph
             if(addedEdge[0]<0 || addedEdge[1]<0) continue;
-            currentKnightMoves.add(addedEdge);
-            //boardGraph.addEdge(addedEdge[0],addedEdge[1]);
+
+            //Converted (x, y) coordinates to vertex indices
+            //knightPosition coordinates is the source node of the knight (beginning mode before moving)
+            //addedEdge coordinates represents each of the destination node in L shape.
+            int source = knightPosition[0] * boardSize + knightPosition[1];
+            int destination = addedEdge[0] * boardSize + addedEdge[1];
+            boardGraph.addEdge(source,destination); //add the edges to the graph
             System.out.println("AddedEdge reference: " + Arrays.toString(addedEdge));
         }
-        BFSShortestPath<Integer, DefaultEdge> BFS = new BFSShortestPath<>(boardGraph);
     }
-    public void findShortestPath()
-    {
 
-    }
     //Represents the Knight and its movement.
     //Responsibilities:
     //Store the Knight's current position.
