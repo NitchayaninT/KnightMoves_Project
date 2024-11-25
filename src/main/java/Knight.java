@@ -2,9 +2,7 @@ import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 
 //Model the Problem as a Graph:
 //Each cell of the board is a vertex.
@@ -16,26 +14,30 @@ public class Knight {
             new int[]{2, 1}, new int[]{2, -1}, new int[]{-2, 1}, new int[]{-2, -1},
             new int[]{1, 2}, new int[]{-1, 2}, new int[]{1, -2}, new int[]{-1, -2}
     ));
-    //private ArrayList<int[]> currentKnightMoves; //currently not sure if this is important, because we
-    //will use the graph to update edges and vertices
+    private LinkedHashMap<Integer,Coordinate> currentKnightMoves; //LinkedHashMap because its easier to access index
     int[] knightPosition = new int[2]; //store current position
     int boardSize;
     SimpleGraph<Integer, DefaultEdge> boardGraph;
 
-    //get knight's graph. this is for the Board class to calculate BFS
+    //getter
     public SimpleGraph<Integer,DefaultEdge> getKnightGraph()
     {
         return boardGraph;
     }
-    //get default knight moves
     public ArrayList<int[]> getDefaultKnightMoves()
     {
         return defaultKnightMoves;
     }
+    public LinkedHashMap<Integer, Coordinate> getCurrentKnightMoves()
+    {
+        return currentKnightMoves;
+    }
 
+    //Constructor
     public Knight() {
         boardGraph = new SimpleGraph<>(DefaultEdge.class);
         boardSize= 0;
+        currentKnightMoves = new LinkedHashMap<>();
     }
 
     //set knightID
@@ -65,6 +67,7 @@ public class Knight {
     {
         setKnightPosition(knightID,boardSize);
         boardGraph = new SimpleGraph<>(DefaultEdge.class);
+
         //insert vertices. (from 0 to N*N)
         int count = 0;
         for(int i=0;i<boardSize;i++)
@@ -77,6 +80,7 @@ public class Knight {
         }
         //edge represents a valid move the Knight can make from one cell to another
         //insert all edges. current position plus all possible knight moves (from default)
+        int countNoOfEdges = 0;
         for(int i=0; i<8 ;i++)
         {
             int []defaultEdge = defaultKnightMoves.get(i); //get default edge (ex. 0, 0)
@@ -86,11 +90,17 @@ public class Knight {
             {
                 addedEdge[j]=defaultEdge[j]+knightPosition[j];
             }
+
             //add possible edges that a knight can move.
             //if either x-axis or y-axis is negative, that means its out of the board
             //its the edges are also inserted in boardGraph
             if(addedEdge[0]<0 || addedEdge[1]<0) continue;
 
+            Coordinate position = new Coordinate(addedEdge[0], addedEdge[1]);
+            currentKnightMoves.put(countNoOfEdges, position);//set current knight moves
+            countNoOfEdges++;
+
+            //ADDING EDGES TO THE GRAPH//
             //Converted (x, y) coordinates to vertex indices
             //knightPosition coordinates is the source node of the knight (beginning mode before moving)
             //addedEdge coordinates represents each of the destination node in L shape.
@@ -100,7 +110,33 @@ public class Knight {
             System.out.println("AddedEdge reference: " + Arrays.toString(addedEdge));
         }
     }
+    public static class Coordinate {
+        int x;
+        int y;
 
+        public Coordinate(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            Bombs.Coordinate that = (Bombs.Coordinate) obj;
+            return x == that.x && y == that.y;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y);
+        }
+
+        @Override
+        public String toString() {
+            return "(" + x + ", " + y + ")";
+        }
+    }
     //Represents the Knight and its movement.
     //Responsibilities:
     //Store the Knight's current position.

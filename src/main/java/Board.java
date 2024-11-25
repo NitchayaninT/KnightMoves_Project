@@ -5,9 +5,10 @@ import java.util.*;
 public class Board {
     private int size;
     private SimpleGraph<Integer, DefaultEdge> knightGraph;
+    //POSITIONS
     private int[] CastlePosition;
     private LinkedHashMap<Integer, Bombs.Coordinate> BombsPosition; //stores set of bombs position
-
+    private LinkedHashMap<Integer, Knight.Coordinate> KnightPosition;
 
     //Store the positions of the Knight, Castle, and Bombs.
     //Track visited cells during the search.
@@ -16,13 +17,14 @@ public class Board {
     //set knight, castle, bombs positions
     public void setKnightGraph(Knight K)
     {
+        KnightPosition = K.getCurrentKnightMoves();
         knightGraph = K.getKnightGraph(); //now has knight's vertices and edges
-        //System.out.println(knightGraph);
+        System.out.println(knightGraph);
+        System.out.println(KnightPosition);
     }
     public void setBombs(LinkedHashMap<Integer,Bombs.Coordinate> bombs)
     {
         BombsPosition = bombs;
-        //System.out.println(BombsPosition);
     }
     public void setCastle(int id)
     {
@@ -47,28 +49,6 @@ public class Board {
     }
 
 
-    public ArrayList<Integer> readStrings()
-    {
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        if (input.isEmpty()) {
-            System.out.println("you havent inserted anything");
-            return new ArrayList<>(); // Return an empty set if input is empty
-        }
-        else if(input.equals("-1"))
-        {
-            return new ArrayList<>(); //return an empty set
-        }
-        String[] names = input.split(",");
-        Integer[] bombIDS = new Integer[names.length];
-
-        for(int i=0;i<names.length;i++)
-        {
-            bombIDS[i]  = Integer.valueOf(names[i].trim()); //bombIDS is an array that stores integers (bomb ids)
-        }
-        //return LinkedHashSet of bombIDS (the ids are stored based on user input)
-        return new ArrayList<>(Arrays.asList(bombIDS));
-    }
     //getter
     public int getSize()
     {

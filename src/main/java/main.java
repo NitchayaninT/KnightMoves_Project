@@ -26,10 +26,13 @@ public class main {
 
         System.out.println("Enter bombs IDS separated by comma");
         Bombs bombs = new Bombs();
-        ArrayList<Integer> IDS = B.readStrings();
+        bombs.setBoardSize(size); //set board size to bombs (for x,y coord calculation)
+        bombs.setBomb(); //set bombs and convert them to coordinates
 
-        bombs.setBomb(IDS, IDS.size());
+        //set these bombs to the Board class
         B.setBombs(bombs.getBombsPosition());
+
+        //DONE SETTING BOMBS,CASTLE,KNIGHT COORDINATES
     }
 }
 
