@@ -5,10 +5,12 @@ import java.util.*;
 public class Board {
     private int size;
     private SimpleGraph<Integer, DefaultEdge> knightGraph;
+    private ArrayList<int[]> defaultKnightMoves;
     //POSITIONS
     private int[] CastlePosition;
     private LinkedHashMap<Integer, Bombs.Coordinate> BombsPosition; //stores set of bombs position
     private LinkedHashMap<Integer, Knight.Coordinate> KnightPosition;
+
 
     //Store the positions of the Knight, Castle, and Bombs.
     //Track visited cells during the search.
@@ -19,6 +21,7 @@ public class Board {
     {
         KnightPosition = K.getCurrentKnightMoves();
         knightGraph = K.getKnightGraph(); //now has knight's vertices and edges
+        defaultKnightMoves = K.getDefaultKnightMoves();
         System.out.println(knightGraph);
         System.out.println(KnightPosition);
     }
