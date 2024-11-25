@@ -5,7 +5,8 @@ import java.util.*;
 public class Board {
     private int size;
     private SimpleGraph<Integer, DefaultEdge> knightGraph;
-    private ArrayList<int[]> defaultKnightMoves;
+    private ArrayList<int[]> defaultKnightMoves; //why dont we use map for this? because the values inside are constant, we
+    //dont have to change any values
     //POSITIONS
     private int[] CastlePosition;
     private LinkedHashMap<Integer, Bombs.Coordinate> BombsPosition; //stores set of bombs position
@@ -81,6 +82,36 @@ public class Board {
             }
             System.out.println();
             System.out.printf("%16s"," ");
+        }
+    }
+
+    //class coordinate, this is for accessing elements in Coordinate class when changing Knight Position
+    public static class Coordinate {
+        int x;
+        int y;
+
+        //insert x axis and y axis to Coordinate before inserting in LinkedHashMap
+        public Coordinate(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            Bombs.Coordinate that = (Bombs.Coordinate) obj;
+            return x == that.x && y == that.y;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y);
+        }
+
+        @Override
+        public String toString() {
+            return "(" + x + ", " + y + ")";
         }
     }
 }
