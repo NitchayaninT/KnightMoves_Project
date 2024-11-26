@@ -10,40 +10,46 @@ import java.util.*;
 //first element : x-axis
 //second element : y-axis
 public class Knight {
-    private ArrayList<int[]> defaultKnightMoves = new ArrayList<>(Arrays.asList(
-            new int[]{2, 1}, new int[]{2, -1}, new int[]{-2, 1}, new int[]{-2, -1},
-            new int[]{1, 2}, new int[]{-1, 2}, new int[]{1, -2}, new int[]{-1, -2}
-    ));
-    private LinkedHashMap<Integer,Coordinate> currentKnightMoves; //LinkedHashMap because its easier to access index
-    int[] knightPosition = new int[2]; //store current position
-    int boardSize;
-    SimpleGraph<Integer, DefaultEdge> boardGraph;
+    private int[] KnightXMoves = new int[]{2,2,1,-1,-2,-2,-1,1};
+    private int[] KnightYMoves = new int[]{1,-1,-2,-2,-1,1,2,2};
+    private int index;
+    //private LinkedHashMap<Integer,Coordinate> currentKnightMoves; //LinkedHashMap because its easier to access index
+    private Coordinate knightPosition; //store current position
+    //SimpleGraph<Integer, DefaultEdge> boardGraph;
 
     //getter
-    public SimpleGraph<Integer,DefaultEdge> getKnightGraph()
+    /*public SimpleGraph<Integer,DefaultEdge> getKnightGraph()
     {
         return boardGraph;
-    }
-    public ArrayList<int[]> getDefaultKnightMoves()
+    }*/
+    public int[] getKnightXMoves()
     {
-        return defaultKnightMoves;
+        return KnightXMoves;
     }
-    public LinkedHashMap<Integer, Coordinate> getCurrentKnightMoves()
+    public int[] getKnightYMoves()
     {
-        return currentKnightMoves;
+        return KnightYMoves;
+    }
+    public Coordinate getKnightPosition()
+    {
+        return knightPosition;
+    }
+    public void setKnightCoordinate(int x, int y)
+    {
+        knightPosition.setX(x);
+        knightPosition.setY(y);
     }
 
     //Constructor
     public Knight() {
-        boardGraph = new SimpleGraph<>(DefaultEdge.class);
-        boardSize= 0;
-        currentKnightMoves = new LinkedHashMap<>();
+        this.index = 0;
+        knightPosition = null;
     }
 
     //set knightID
     public void setKnightPosition(int knightID,int boardSize)
     {
-        this.boardSize = boardSize;
+        this.index = knightID;
         int count = 0;
         boolean found = false;
         for(int i=0;i<boardSize;i++)
@@ -53,7 +59,7 @@ public class Knight {
                 if(knightID == count) {
                     //j is column. so its x-axis
                     //i is row, so its y-axis
-                    knightPosition = new int[]{j, i};
+                    knightPosition = new Coordinate(j,i);
                     found = true;
                     break;
                 }
@@ -61,9 +67,9 @@ public class Knight {
             }
             if(found) break;
         }
-        System.out.println("knight position : "+Arrays.toString(knightPosition));
     }
-    public void initialKnightMoves(int knightID,int boardSize)
+
+    /*public void initialKnightMoves(int knightID,int boardSize)
     {
         setKnightPosition(knightID,boardSize);
         boardGraph = new SimpleGraph<>(DefaultEdge.class);
@@ -109,36 +115,12 @@ public class Knight {
             boardGraph.addEdge(source,destination); //add the edges to the graph
             System.out.println("AddedEdge reference: " + Arrays.toString(addedEdge));
         }
-    }
-    public static class Coordinate {
-        int x;
-        int y;
+    }*/
 
-        public Coordinate(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            Bombs.Coordinate that = (Bombs.Coordinate) obj;
-            return x == that.x && y == that.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
-        }
-
-        @Override
-        public String toString() {
-            return "(" + x + ", " + y + ")";
-        }
-    }
-    //Represents the Knight and its movement.
-    //Responsibilities:
-    //Store the Knight's current position.
-    //Calculate possible moves.
 }
+
+//Represents the Knight and its movement.
+//Responsibilities:
+//Store the Knight's current position.
+//Calculate possible moves.
+
