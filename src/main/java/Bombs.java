@@ -6,8 +6,6 @@ public class Bombs {
     private ArrayList<Coordinate> BombsPosition;
     private ArrayList<Integer> BombsID;
 
-    //why LinkedHashMap? because we want index as a key of each coordinate
-
     public Bombs() {
         this.BombsPosition = new ArrayList<Coordinate>();
         this.BombsID = new ArrayList<Integer>();
@@ -32,7 +30,6 @@ public class Bombs {
     }
 
     //getter
-
     public ArrayList<Integer> getBombsID() {
         return BombsID;
     }
@@ -43,21 +40,44 @@ public class Bombs {
 
     public ArrayList<Integer> readStrings() {
         Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        if (input.isEmpty()) {
-            System.out.println("you havent inserted anything");
-            return new ArrayList<>(); // Return an empty set if input is empty
-        } else if (input.equals("-1")) {
-            return new ArrayList<>(); //return an empty set
-        }
-        String[] names = input.split(",");
-        Integer[] bombIDS = new Integer[names.length];
+        boolean valid = false;
+        boolean isEmpty = false;
+        ArrayList<Integer> bombIDs = null;
 
-        for (int i = 0; i < names.length; i++) {
-            bombIDS[i] = Integer.valueOf(names[i].trim()); //bombIDS is an array that stores integers (bomb ids)
+        while (!valid) {
+            int invalidCount = 0;
+            System.out.println("Enter bomb IDs separated by commas(invalid IDs will be ignored)");
+            String input = sc.nextLine();
+            if (input.isEmpty()) {
+                System.out.println("you havent inserted anything");
+                continue;
+            } else if (input.equals("-1")) {
+                isEmpty = true;
+                break; //return an empty set
+            }
+            String[] names = input.split(",");
+            bombIDs = new ArrayList<>();
+
+            for (String name : names) {
+                try {
+                    // Try to convert the trimmed string to an integer
+                    int bombID = Integer.parseInt(name.trim());
+                    bombIDs.add(bombID);
+                } catch (NumberFormatException e) {
+                    isEmpty = true;
+                    invalidCount++;
+                    break; //return an empty set if invalid
+
+                }
+            }
+            if(isEmpty)break;
+            valid = true;
+
         }
-        //return LinkedHashSet of bombIDS (the ids are stored based on user input)
-        return new ArrayList<>(Arrays.asList(bombIDS));
+        if(isEmpty)
+        {
+            return new ArrayList<>();
+        }
+        return bombIDs;
     }
-
 }

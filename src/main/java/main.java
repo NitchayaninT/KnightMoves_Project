@@ -1,59 +1,107 @@
 import java.util.*;
 
 public class main {
-
-    public static void main(String args[])
+    int size;
+    int knightID;
+    int castleID;
+    public static void main(String args[]) {
+        main game = new main();  // Create an instance of Main to hold the game state
+        game.knightMoves();
+    }
+    public void knightMoves()
     {
         String s = "";
-        do{
+
+        do {
             Scanner sc = new Scanner(System.in);
-            System.out.println("Enter N for N*N board (N must be at least 5)");
-            int size = sc.nextInt();
-            //create knight
+
+            boolean Lessthan5 = true;
+            while (Lessthan5 == true) {
+                System.out.println("Enter N for N*N board (N must be at least 5)");
+
+                try {
+                    Scanner ans = new Scanner(System.in);
+                    size = ans.nextInt(); //if size not int, go to catch
+                    if (size >= 4) Lessthan5 = false;
+                    else {
+                        System.out.println("=======================================");
+                        System.out.println("N should be at least 5, insert again!");
+                        System.out.println("=======================================\n");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("=======================================");
+                    System.out.println("Invalid input! Please enter an integer.");
+                    System.out.println("=======================================\n");
+                }
+
+            }
 
             //create board
             Board B = new Board(size);
             B.printBoard();
 
             //Enter knight, castle and bombIDs
-            System.out.println("\nEnter Knight ID");
-            int knightID = sc.nextInt();
-            //k.initialKnightMoves(knightID,size); //initialize knight moves based on current position and create
-            //Knight Graph.
             Knight k = new Knight();
-            k.setKnightPosition(knightID,size);
-            System.out.println("Enter Castle ID");
-            int castleID = sc.nextInt();
-            B.setCastle(castleID);
-            System.out.println("Enter bomb IDs separated by commas(invalid IDs will be ignored)");
+            boolean valid = false;
+            while (valid == false) {
+                System.out.println("\nEnter Knight ID");
+
+                try {
+                    Scanner ans = new Scanner(System.in);
+                    knightID = ans.nextInt();
+                    if (knightID < size * size && knightID >= 0) {
+                        k.setKnightPosition(knightID, size);
+                        valid = true;
+                    } else {
+                        System.out.println("=======================================");
+                        System.out.println("Invalid Position!! Please insert again");
+                        System.out.println("=======================================");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("=======================================");
+                    System.out.println("Invalid input! Please enter an integer.");
+                    System.out.println("=======================================");
+                }
+            }
+
+            valid = false;
+            while (valid == false) {
+                System.out.println("Enter Castle ID");
+                try {
+                    Scanner ans = new Scanner(System.in);
+                    castleID = ans.nextInt();
+                    if (castleID < size * size && castleID > 0) {
+                        B.setCastle(castleID);
+                        valid = true;
+                    } else {
+                        System.out.println("=======================================");
+                        System.out.println("Invalid Position!! Please insert again");
+                        System.out.println("=======================================\n");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("=======================================");
+                    System.out.println("Invalid input! Please enter an integer.");
+                    System.out.println("=======================================\n");
+                }
+            }
+            //inserting Bombs
             Bombs bombs = new Bombs();
-            bombs.setBombCoordinate(size,castleID,knightID);
+            //System.out.println("Enter bomb IDs separated by commas(invalid IDs will be ignored)");
+            bombs.setBombCoordinate(size, castleID, knightID);
             B.setKnight(k);
             B.setBombs(bombs);
-            System.out.printf("\nInitial --> knight at %d\n",knightID);
-            B.printAns(knightID,castleID,bombs.getBombsID());
+
+            System.out.printf("\nInitial --> knight at %d\n", knightID);
+            B.printAns(knightID, castleID, bombs.getBombsID());
             B.bfs();
-            for(int i=0;i<80;i++)System.out.printf("=");
+            for (int i = 0; i < 80; i++) System.out.printf("=");
+
             System.out.println();
             System.out.println("New game (y/n)?");
             Scanner sc2 = new Scanner(System.in);
             s = sc2.nextLine();
         }while(!s.equalsIgnoreCase("n"));
-        //B.setKnightGraph(k); //return Knight's graph to the board
 
-        /*System.out.println("Enter Castle ID");
-        int castleID = sc.nextInt();
-        B.setCastle(castleID);
-
-        System.out.println("Enter bombs IDS separated by comma");
-        Bombs bombs = new Bombs();
-        bombs.setBoardSize(size); //set board size to bombs (for x,y coord calculation)
-        bombs.setBomb(); //set bombs and convert them to coordinates
-
-        //set these bombs to the Board class
-        B.setBombs(bombs.getBombsPosition());/*
-
-        //DONE SETTING BOMBS,CASTLE,KNIGHT COORDINATES*/
     }
 }
 

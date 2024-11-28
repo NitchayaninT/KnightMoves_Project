@@ -7,32 +7,11 @@ import java.util.*;
 public class Board {
 
     private static int size;
-    //private SimpleGraph<Integer, DefaultEdge> knightGraph;
     private Knight knight;
     private Bombs bombs;
-    //private ArrayList<int[]> defaultKnightMoves; //why dont we use map for this? because the values inside are constant, we
-    //dont have to change any values
     //POSITIONS
     private Coordinate CastlePosition;
-    //private LinkedHashMap<Integer, Bombs.Coordinate> BombsPosition; //stores set of bombs position
-    //private LinkedHashMap<Integer, Knight.Coordinate> KnightPosition;
 
-    //Store the positions of the Knight, Castle, and Bombs.
-    //Track visited cells during the search.
-    //Validate whether a move is within bounds and safe.
-    //set knight, castle, bombs positions
-    /*public void setKnightGraph(Knight K)
-    {
-        KnightPosition = K.getCurrentKnightMoves();
-        knightGraph = K.getKnightGraph(); //now has knight's vertices and edges
-        defaultKnightMoves = K.getDefaultKnightMoves();
-        System.out.println(knightGraph);
-        System.out.println(KnightPosition);
-    }*/
- /*public void setBombs(LinkedHashMap<Integer,Bombs.Coordinate> bombs)
-    {
-        BombsPosition = bombs;
-    }*/
     public Knight getKnight() {
         return knight;
     }
@@ -192,5 +171,5 @@ public class Board {
             if(bombs.equals(neighborKnightPosition))return false;
         }
         return true;
-    }  //class coordinate, this is for accessing elements in Coordinate class when changing Knight Position
+    }
 }
