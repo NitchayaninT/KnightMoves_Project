@@ -18,7 +18,7 @@ public class Bombs {
         // we convert these IDs to position in (x, y) format in BombPosition
         for (int id_index = 0; id_index < A.size(); id_index++) {
             int id = A.get(id_index);
-            if (id > 0 && id < (Board.getSize() * Board.getSize() - 1) && id != castleID && id != knightID) {
+            if (id >= 0 && id <= (Board.getSize() * Board.getSize() - 1) && id != castleID && id != knightID) {
                 int x = id % size;  // x = column
                 int y = id / size;  // y = row
 

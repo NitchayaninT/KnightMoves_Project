@@ -22,7 +22,7 @@ public class main {
                 try {
                     Scanner ans = new Scanner(System.in);
                     size = ans.nextInt(); //if size not int, go to catch
-                    if (size >= 4) Lessthan5 = false;
+                    if (size > 4) Lessthan5 = false;
                     else {
                         System.out.println("=======================================");
                         System.out.println("N should be at least 5, insert again!");
