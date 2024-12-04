@@ -70,7 +70,7 @@ public class main {
                 try {
                     Scanner ans = new Scanner(System.in);
                     castleID = ans.nextInt();
-                    if (castleID < size * size && castleID > 0) {
+                    if (castleID < size * size && castleID >= 0) {
                         B.setCastle(castleID);
                         valid = true;
                     } else {
@@ -86,7 +86,6 @@ public class main {
             }
             //inserting Bombs
             Bombs bombs = new Bombs();
-            //System.out.println("Enter bomb IDs separated by commas(invalid IDs will be ignored)");
             bombs.setBombCoordinate(size, castleID, knightID);
             B.setKnight(k);
             B.setBombs(bombs);
@@ -97,9 +96,18 @@ public class main {
             for (int i = 0; i < 80; i++) System.out.printf("=");
 
             System.out.println();
-            System.out.println("New game (y/n)?");
-            Scanner sc2 = new Scanner(System.in);
-            s = sc2.nextLine();
+
+            while(true) {
+                System.out.println("New game (y/n)?");
+                Scanner sc2 = new Scanner(System.in);
+                s = sc2.nextLine();
+                if(!Objects.equals(s, "n") && !Objects.equals(s,"y"))
+                {
+                    System.out.println("Please insert y or n!");
+                }
+                else break;
+            }
+
         }while(!s.equalsIgnoreCase("n"));
 
     }

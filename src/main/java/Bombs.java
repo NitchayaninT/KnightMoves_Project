@@ -12,9 +12,17 @@ public class Bombs {
 
     }
 
+    public static boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str); // Try to parse the string as an integer
+            return true; // If successful, it's an integer
+        } catch (NumberFormatException e) {
+            return false; // If parsing fails, it's not an integer
+        }
+    }
     public void setBombCoordinate(int size, int castleID,int knightID) {
         // Create a map to store bomb positions with the ID as the key
-        ArrayList<Integer> A = readStrings();
+        ArrayList<Integer> A = readStrings(size);
         // we convert these IDs to position in (x, y) format in BombPosition
         for (int id_index = 0; id_index < A.size(); id_index++) {
             int id = A.get(id_index);
@@ -38,22 +46,26 @@ public class Bombs {
         return BombsPosition;
     }
 
-    public ArrayList<Integer> readStrings() {
+    public ArrayList<Integer> readStrings(int size) {
         Scanner sc = new Scanner(System.in);
         boolean valid = false;
         boolean isEmpty = false;
+        boolean exceedsBoard = false;
         ArrayList<Integer> bombIDs = null;
 
         while (!valid) {
-            int invalidCount = 0;
+            exceedsBoard = false;
             System.out.println("Enter bomb IDs separated by commas(invalid IDs will be ignored)");
             String input = sc.nextLine();
             if (input.isEmpty()) {
                 System.out.println("you havent inserted anything");
                 continue;
-            } else if (input.equals("-1")) {
-                isEmpty = true;
-                break; //return an empty set
+            }
+            else if (isInteger(input)) { // Check if the input is an integer
+                if (Integer.parseInt(input) < 0 || Integer.parseInt(input)>=size) {
+                    isEmpty = true;
+                    break; // Break the loop for numbers less than 0
+                }
             }
             String[] names = input.split(",");
             bombIDs = new ArrayList<>();
@@ -62,15 +74,21 @@ public class Bombs {
                 try {
                     // Try to convert the trimmed string to an integer
                     int bombID = Integer.parseInt(name.trim());
+                    if(bombID >= size*size || bombID < 0)
+                    {
+                        System.out.println("Some IDs are exceeding the board, please enter the full list again\n");
+                        exceedsBoard = true;
+                        break; //break from for loop, but not the big !valid loop because its still not valid
+                    }
                     bombIDs.add(bombID);
                 } catch (NumberFormatException e) {
                     isEmpty = true;
-                    invalidCount++;
                     break; //return an empty set if invalid
 
                 }
             }
             if(isEmpty)break;
+            if(exceedsBoard) continue;
             valid = true;
 
         }
