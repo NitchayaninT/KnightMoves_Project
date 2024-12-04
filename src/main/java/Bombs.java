@@ -82,6 +82,12 @@ public class Bombs {
                     }
                     bombIDs.add(bombID);
                 } catch (NumberFormatException e) {
+                    if(names.length > 1)
+                    {
+                        System.out.println("Some IDs are not integer, please enter the full list again\n");
+                        exceedsBoard = true;
+                        break; //break from for loop, but not the big !valid loop because its still not valid
+                    }
                     isEmpty = true;
                     break; //return an empty set if invalid
 
